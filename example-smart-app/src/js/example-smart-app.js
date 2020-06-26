@@ -1,4 +1,5 @@
 (function(window){
+	window.coordinates = [];
 	var singlePatient_ind = false;
 
   window.extractData = function() {
@@ -27,12 +28,6 @@
             lname = patient.name[0].family;
           }
 
-          // var fullAddress = '';
-          // if (typeof patient.address !== 'undefined' && patient.address.length > 0) {
-          //   var address = patient.address[0];
-          //   fullAddress = encodeURI(address.city + ',' + address.state + ' ' + address.postalCode)
-          // }
-
           var p = defaultPatient();
           p.birthdate = patient.birthDate;
           p.gender = gender;
@@ -44,30 +39,26 @@
 						window.coordinates = [coordinates];
 						ret.resolve(p);
 					});
-
-          // var geocode = {
-          //   "url": "https://open.mapquestapi.com/geocoding/v1/address?key=rJam5yuMtlUxrAr0N1LggtYGd7Q9vvB0&location=" + fullAddress,
-          //   "method": "GET",
-          //   "timeout": 0,
-          // };
-
-          // $.ajax(geocode).done(function (response) {
-          //   console.log(response);
-          //   if (response.results.length > 0) {
-          //     var result = response.results[0];
-          //     if (result.locations.length > 0) {
-          //       p.coordinates = result.locations[0].displayLatLng;
-					// 			window.coordinates = [p.coordinates]
-					// 		}
-          //   }
-					//
-          //   ret.resolve(p);
-          // });
         });
       } else {
         var patient_list = prompt("What patients do you want to lookup?").split(" ");
-				console.log(patient_list);
-				ret.resolve();
+        var pt_promises = [];
+        for (var idx = 0; idx < patient_list.length; idx += 1) {
+        	var pt_id = patient_list[idx];
+        	if (pt_id.length > 0) {
+						var pt = smart.api.search({type: 'Patient', 'patient': pt_id});
+						pt_promises.push(pt);
+					}
+				}
+        if (pt_promises.length > 0) {
+					$.when(...pt_promises).done(function (patient_data) {
+						console.log(patient_data);
+						ret.resolve(patient_data);
+					});
+				}
+        else {
+					ret.resolve();
+				}
       }
     }
 
