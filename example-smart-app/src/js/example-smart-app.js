@@ -63,6 +63,7 @@
 						if (geo_promises.length > 0) {
 							$.when(...geo_promises).done(function(...coordinates){
 								window.coordinates = coordinates;
+								ret.resolve();
 							});
 						}
 						else {
