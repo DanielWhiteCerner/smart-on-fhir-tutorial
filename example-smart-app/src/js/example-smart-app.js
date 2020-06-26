@@ -39,8 +39,9 @@
           p.fname = fname;
           p.lname = lname;
 
-					lookupGeocode(patient.address).then(function (){
-						p.coordinates = window.coordinates[0];
+					lookupGeocode(patient.address).then(function (coordinates){
+						p.coordinates = coordinates;
+						window.coordinates = [coordinates];
 						ret.resolve(p);
 					});
 
@@ -64,8 +65,8 @@
           // });
         });
       } else {
-        var patient_list = confirm("What patients do you want to lookup?");
-        console.log(patient_list);
+        var patient_list = prompt("What patients do you want to lookup?").split(" ");
+				console.log(patient_list);
       }
     }
 
@@ -91,8 +92,7 @@
 			if (response.results.length > 0) {
 				var result = response.results[0];
 				if (result.locations.length > 0) {
-					window.coordinates = [result.locations[0].displayLatLng];
-					defer.resolve(window.coordinates);
+					defer.resolve(result.locations[0].displayLatLng);
 				}
 			}
 		});
@@ -144,18 +144,20 @@
   }
 
   window.drawVisualization = function(p) {
-    $('#holder').show();
-    $('#loading').hide();
-    $('#fname').html(p.fname);
-    $('#lname').html(p.lname);
-    $('#gender').html(p.gender);
-    $('#birthdate').html(p.birthdate);
-    $('#height').html(p.height);
-    $('#systolicbp').html(p.systolicbp);
-    $('#diastolicbp').html(p.diastolicbp);
-    $('#ldl').html(p.ldl);
-    $('#hdl').html(p.hdl);
-    $('#coordinates').html(p.coordinates.lat + ", " + p.coordinates.lng);
+		$('#loading').hide();
+  	if (singlePatient_ind) {
+			$('#holder').show();
+			$('#fname').html(p.fname);
+			$('#lname').html(p.lname);
+			$('#gender').html(p.gender);
+			$('#birthdate').html(p.birthdate);
+			$('#height').html(p.height);
+			$('#systolicbp').html(p.systolicbp);
+			$('#diastolicbp').html(p.diastolicbp);
+			$('#ldl').html(p.ldl);
+			$('#hdl').html(p.hdl);
+			$('#coordinates').html(p.coordinates.lat + ", " + p.coordinates.lng);
+		}
   };
 
 })(window);
