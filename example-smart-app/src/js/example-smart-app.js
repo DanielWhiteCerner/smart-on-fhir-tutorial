@@ -24,11 +24,11 @@
             lname = patient.name[0].family;
           }
 
-          var fullAddress = '';
-          if (typeof patient.address !== 'undefined' && patient.address.length > 0) {
-            var address = patient.address[0];
-            fullAddress = encodeURI(address.city + ',' + address.state + ' ' + address.postalCode)
-          }
+          // var fullAddress = '';
+          // if (typeof patient.address !== 'undefined' && patient.address.length > 0) {
+          //   var address = patient.address[0];
+          //   fullAddress = encodeURI(address.city + ',' + address.state + ' ' + address.postalCode)
+          // }
 
           var p = defaultPatient();
           p.birthdate = patient.birthDate;
@@ -36,24 +36,29 @@
           p.fname = fname;
           p.lname = lname;
 
-          var geocode = {
-            "url": "https://open.mapquestapi.com/geocoding/v1/address?key=rJam5yuMtlUxrAr0N1LggtYGd7Q9vvB0&location=" + fullAddress,
-            "method": "GET",
-            "timeout": 0,
-          };
+					lookupGeocode(patient.address).then(function (){
+						p.coordinates = window.coordinates;
+						ret.resolve(p);
+					});
 
-          $.ajax(geocode).done(function (response) {
-            console.log(response);
-            if (response.results.length > 0) {
-              var result = response.results[0];
-              if (result.locations.length > 0) {
-                p.coordinates = result.locations[0].displayLatLng;
-								window.coordinates = [p.coordinates]
-							}
-            }
+          // var geocode = {
+          //   "url": "https://open.mapquestapi.com/geocoding/v1/address?key=rJam5yuMtlUxrAr0N1LggtYGd7Q9vvB0&location=" + fullAddress,
+          //   "method": "GET",
+          //   "timeout": 0,
+          // };
 
-            ret.resolve(p);
-          });
+          // $.ajax(geocode).done(function (response) {
+          //   console.log(response);
+          //   if (response.results.length > 0) {
+          //     var result = response.results[0];
+          //     if (result.locations.length > 0) {
+          //       p.coordinates = result.locations[0].displayLatLng;
+					// 			window.coordinates = [p.coordinates]
+					// 		}
+          //   }
+					//
+          //   ret.resolve(p);
+          // });
         });
       } else {
         onError();
@@ -64,6 +69,32 @@
     return ret.promise();
 
   };
+
+  function lookupGeocode(fhirAddress){
+		var defer = $.Deferred();
+		var fullAddress = '';
+		if (typeof fhirAddress !== 'undefined' && fhirAddress.length > 0) {
+			var address = fhirAddress[0];
+			fullAddress = encodeURI(address.city + ',' + address.state + ' ' + address.postalCode)
+		}
+		var geocode = {
+			"url": "https://open.mapquestapi.com/geocoding/v1/address?key=rJam5yuMtlUxrAr0N1LggtYGd7Q9vvB0&location=" + fullAddress,
+			"method": "GET",
+			"timeout": 0,
+		};
+
+		$.ajax(geocode).done(function (response) {
+			if (response.results.length > 0) {
+				var result = response.results[0];
+				if (result.locations.length > 0) {
+					window.coordinates = [result.locations[0].displayLatLng];
+					defer.resolve(window.coordinates);
+				}
+			}
+		});
+
+		return defer.promise();
+	}
 
   function defaultPatient(){
     return {
