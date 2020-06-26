@@ -37,12 +37,9 @@
           p.lname = lname;
 
           var geocode = {
-            "url": "http://open.mapquestapi.com/geocoding/v1/address?key=rJam5yuMtlUxrAr0N1LggtYGd7Q9vvB0&location=" + fullAddress,
+            "url": "https://open.mapquestapi.com/geocoding/v1/address?key=rJam5yuMtlUxrAr0N1LggtYGd7Q9vvB0&location=" + fullAddress,
             "method": "GET",
             "timeout": 0,
-            "headers": {
-              "Cookie": "JSESSIONID=4F8497FCBF02E591BB6AE625D3BF6747"
-            },
           };
 
           $.ajax(geocode).done(function (response) {
