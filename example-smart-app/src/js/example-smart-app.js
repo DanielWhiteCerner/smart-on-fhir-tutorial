@@ -37,7 +37,7 @@
           p.lname = lname;
 
 					lookupGeocode(patient.address).then(function (){
-						p.coordinates = window.coordinates;
+						p.coordinates = window.coordinates[0];
 						ret.resolve(p);
 					});
 
