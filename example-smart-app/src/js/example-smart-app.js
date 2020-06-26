@@ -24,13 +24,32 @@
             lname = patient.name[0].family;
           }
 
+          var fullAddress = '';
+          if (typeof patient.address !== 'undefined' && patient.address.length > 0) {
+            var address = patient.address[0];
+            fullAddress = encodeURI(address.city + ',' + address.state + ' ' + address.postalCode)
+          }
+
           var p = defaultPatient();
           p.birthdate = patient.birthDate;
           p.gender = gender;
           p.fname = fname;
           p.lname = lname;
 
-          ret.resolve(p);
+          var geocode = {
+            "url": "http://open.mapquestapi.com/geocoding/v1/address?key=rJam5yuMtlUxrAr0N1LggtYGd7Q9vvB0&location=" + fullAddress,
+            "method": "GET",
+            "timeout": 0,
+            "headers": {
+              "Cookie": "JSESSIONID=4F8497FCBF02E591BB6AE625D3BF6747"
+            },
+          };
+
+          $.ajax(geocode).done(function (response) {
+            console.log(response);
+
+            ret.resolve(p);
+          });
         });
       } else {
         onError();
