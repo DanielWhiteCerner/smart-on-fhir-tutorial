@@ -47,6 +47,12 @@
 
           $.ajax(geocode).done(function (response) {
             console.log(response);
+            if (response.results.length > 0) {
+              var result = response.results[0];
+              if (result.locations.length > 0) {
+                p.coordinates = result.locations[0].displayLatLng;
+              }
+            }
 
             ret.resolve(p);
           });
@@ -72,6 +78,7 @@
       diastolicbp: {value: ''},
       ldl: {value: ''},
       hdl: {value: ''},
+      coordinates: {lat: 0, lng: 0}
     };
   }
 
@@ -115,6 +122,7 @@
     $('#diastolicbp').html(p.diastolicbp);
     $('#ldl').html(p.ldl);
     $('#hdl').html(p.hdl);
+    $('#coordinates').html(p.coordinates.lat + ", " + p.coordinates.lng)
   };
 
 })(window);
