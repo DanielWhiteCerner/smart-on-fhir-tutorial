@@ -1,4 +1,6 @@
 (function(window){
+	var singlePatient_ind = false;
+
   window.extractData = function() {
     var ret = $.Deferred();
 
@@ -9,6 +11,7 @@
 
     function onReady(smart)  {
       if (smart.hasOwnProperty('patient')) {
+				singlePatient_ind = true;
         var patient = smart.patient;
         var pt = patient.read();
 
@@ -61,7 +64,8 @@
           // });
         });
       } else {
-        onError();
+        var patient_list = confirm("What patients do you want to lookup?");
+        console.log(patient_list);
       }
     }
 
