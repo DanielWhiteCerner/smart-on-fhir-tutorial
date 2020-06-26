@@ -1,0 +1,14 @@
+{
+  "name": "@danielwhitecerner/worldmap-with-markers",
+  "main": "fd60897b40b61b9d@162.js",
+  "version": "162.0.0",
+  "homepage": "https://observablehq.com/@danielwhitecerner/worldmap-with-markers",
+  "author": {
+    "name": "Daniel White",
+    "url": "https://observablehq.com/@danielwhitecerner"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}

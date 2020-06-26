@@ -47,7 +47,7 @@
             if (response.results.length > 0) {
               var result = response.results[0];
               if (result.locations.length > 0) {
-                p.coordinates = result.locations[0].displayLatLng;
+                window.coordinates = p.coordinates = result.locations[0].displayLatLng;
               }
             }
 
@@ -119,7 +119,7 @@
     $('#diastolicbp').html(p.diastolicbp);
     $('#ldl').html(p.ldl);
     $('#hdl').html(p.hdl);
-    $('#coordinates').html(p.coordinates.lat + ", " + p.coordinates.lng)
+    $('#coordinates').html(p.coordinates.lat + ", " + p.coordinates.lng);
   };
 
 })(window);

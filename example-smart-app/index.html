@@ -63,11 +63,16 @@
     <!-- https://github.com/cerner/fhir-client-cerner-additions -->
     <script src='./lib/js/fhir-client-cerner-additions-1.0.0.js'></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>
+    <script type="module">
+      import define from "./src/d3/index.js";
+      import {Runtime, Library, Inspector} from "./src/d3/runtime.js";
+
       extractData().then(
         //Display Patient Demographics and Observations if extractData was success
         function(p) {
           drawVisualization(p);
+          const runtime = new Runtime();
+          const main = runtime.module(define, Inspector.into(document.body));
         },
 
         //Display 'Failed to call FHIR Service' if extractData failed
