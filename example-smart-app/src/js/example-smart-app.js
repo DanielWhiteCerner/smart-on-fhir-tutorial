@@ -67,6 +67,7 @@
       } else {
         var patient_list = prompt("What patients do you want to lookup?").split(" ");
 				console.log(patient_list);
+				ret.resolve();
       }
     }
 
