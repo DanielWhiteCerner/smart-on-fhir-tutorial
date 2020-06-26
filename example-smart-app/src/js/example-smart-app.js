@@ -51,12 +51,28 @@
 					}
 				}
         if (pt_promises.length > 0) {
-					$.when(...pt_promises).done(function (patient_data) {
-						console.log(patient_data);
-						ret.resolve(patient_data);
+					$.when(...pt_promises).done(function (...patient_data) {
+						var geo_promises = [];
+						for (var idx = 0; idx < patient_data.length; idx += 1) {
+							var entries = patient_data[idx].data.entry;
+							if (entries.length > 0){
+								var geo = lookupGeocode(entries[0].resource.address);
+								geo_promises.push(geo);
+							}
+						}
+						if (geo_promises.length > 0) {
+							$.when(...geo_promises).done(function(...coordinates){
+								window.coordinates = coordinates;
+							});
+						}
+						else {
+							alert("No geocodes found");
+							ret.resolve();
+						}
 					});
 				}
         else {
+        	alert("No patients provided");
 					ret.resolve();
 				}
       }
