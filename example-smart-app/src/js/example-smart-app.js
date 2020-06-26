@@ -47,8 +47,9 @@
             if (response.results.length > 0) {
               var result = response.results[0];
               if (result.locations.length > 0) {
-                window.coordinates = p.coordinates = result.locations[0].displayLatLng;
-              }
+                p.coordinates = result.locations[0].displayLatLng;
+								window.coordinates = [p.coordinates]
+							}
             }
 
             ret.resolve(p);

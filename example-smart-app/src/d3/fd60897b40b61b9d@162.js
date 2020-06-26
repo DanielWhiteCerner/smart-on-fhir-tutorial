@@ -1,9 +1,6 @@
 // https://observablehq.com/@danielwhitecerner/worldmap-with-markers@162
 export default function define(runtime, observer) {
   const main = runtime.module();
-  main.variable(observer()).define(["md"], function(md){return(
-md`# Worldmap with Markers`
-)});
   main.variable(observer("chart")).define("chart", ["DOM","width","height","d3","projection","sphere","world","colors","markers","drag"], function(DOM,width,height,d3,projection,sphere,world,colors,markers,drag)
 {
   const context = DOM.context2d(width, height);
@@ -77,10 +74,6 @@ require("d3@5")
          "coordinates": points.map(p => ([p.lng, p.lat]))
 }
 )});
-  main.variable(observer("points")).define("points", function(){return(
-[
-  window.coordinates
-]
-)});
+  main.variable(observer("points")).define("points", function(){return(window.coordinates)});
   return main;
 }
